@@ -2,7 +2,8 @@ import functools
 
 
 def lfu_cache(max_limit=64):
-    """Decorator for caching with deleting elements by LFU algorithm after going beyond the limit"""
+    """A decorator for caching with deleting elements by LFU algorithm after going beyond the limit"""
+
     def internal(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
