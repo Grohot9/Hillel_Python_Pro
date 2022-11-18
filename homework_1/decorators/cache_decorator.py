@@ -1,5 +1,4 @@
 import functools
-import requests
 
 
 def lfu_cache(max_limit=64):
@@ -48,10 +47,3 @@ def lfu_cache(max_limit=64):
         return wrapper
 
     return internal
-
-
-@lfu_cache(max_limit=4)
-def fetch_url(url: str, first_n: int = 100):
-    """Fetch a given url"""
-    res = requests.get(url)
-    return res.content[:first_n] if first_n else res.content
