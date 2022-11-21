@@ -1,5 +1,5 @@
 import functools
-import psutil
+import tracemalloc
 
 
 def memory(func):
@@ -7,11 +7,11 @@ def memory(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        process = psutil.Process()
-        memory_usage_before = process.memory_info().rss
-        result = func(*args, **kwargs)
-        memory_usage_after = process.memory_info().rss
-        print(f"The function took up {memory_usage_after - memory_usage_before} Byte of the physical memory.")
-        return result
+        tracemalloc.start()
+        func(*args, **kwargs)
+        snapshot = tracemalloc.take_snapshot()
+        tracemalloc.stop()
+        stats = snapshot.statistics('traceback')[0]
+        print("The function took up %.1f KiB of the physical memory." % (stats.size / 1024))
 
     return wrapper
