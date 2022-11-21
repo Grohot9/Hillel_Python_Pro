@@ -12,6 +12,6 @@ def memory(func):
         snapshot = tracemalloc.take_snapshot()
         tracemalloc.stop()
         stats = snapshot.statistics('traceback')[0]
-        print("The function took up %.1f KiB of the physical memory." % (stats.size / 1024))
+        print("The function took up %.1f MB of the physical memory." % (stats.size / 1024 / 1024))
 
     return wrapper
