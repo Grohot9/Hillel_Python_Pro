@@ -26,8 +26,8 @@ def generate_password() -> str:
     password_length = random.randint(10, 20)
     available_characters = (string.ascii_lowercase, string.ascii_uppercase, string.digits, string.punctuation)
     password = "".join([random.choice(available) for available in available_characters])
-    for _ in range(password_length - len(available_characters)):
-        password += str(random.choice(random.choice(available_characters)))
+    password += "".join(random.choices(random.choice(available_characters),
+                                       k=password_length - len(available_characters)))
     return password
 
 
