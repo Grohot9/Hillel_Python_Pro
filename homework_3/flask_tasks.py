@@ -58,9 +58,9 @@ def generate_students(count):
     location="query"
 )
 def get_bitcoin_value(currency):
-    rates_url = "https://bitpay.com/api/rates"
+    rates_url = f"https://bitpay.com/api/rates/{currency}"
     rates_result = requests.get(rates_url, {})
-    if rates_result.status_code not in (HTTPStatus.OK,):
+    if rates_result.status_code not in (HTTPStatus.OK, ):
         return Response(
             "ERROR: Something went wrong.",
             status=rates_result.status_code
@@ -74,17 +74,13 @@ def get_bitcoin_value(currency):
             status=currencies_result.status_code
         )
     currencies_result = currencies_result.json()
+    rate = rates_result.get("rate", "?")
     symbol = currency
     for entry in currencies_result.get("data", {}):
         if currency == entry.get("code", {}):
             symbol = entry.get("symbol", currency)
             break
-    rate = "?"
-    for entry in rates_result:
-        if currency == entry.get("code", {}):
-            rate = entry.get("rate", "?")
-            break
     return f"The bitcoin rate is {rate}{symbol}"
 
 
-app.run(port=5001, debug=False)
+app.run(port=5001, debug=True)
