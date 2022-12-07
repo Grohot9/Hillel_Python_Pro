@@ -51,13 +51,12 @@ def order_price(country):
     location="query"
 )
 def get_all_info_about_track(track_id):
-    if not track_id.isdigit():
+    if not str(track_id).isdigit():
         return "ERROR: track_id should be a number"
     query = f"SELECT tracks.TrackId, tracks.Name AS Track, tracks.Composer, albums.Title as Album," \
             f" artists.Name AS Artist, genres.Name AS Genre, playlists.Name AS Playlist," \
-            f" floor((tracks.Milliseconds / (1000 * 60 * 60)) % 24) || '/' || floor((tracks.Milliseconds /" \
-            f" (1000 * 60)) % 60) ||'/' || floor((tracks.Milliseconds / 1000) % 60) AS Time," \
-            f" tracks.Bytes AS Size FROM tracks JOIN albums on tracks.AlbumId = albums.AlbumId JOIN" \
+            f" floor((tracks.Milliseconds / (1000 * 60)) % 60) || 'm:' || floor((tracks.Milliseconds / 1000) % 60)" \
+            f" || 's' AS Time, tracks.Bytes AS Size FROM tracks JOIN albums on tracks.AlbumId = albums.AlbumId JOIN" \
             f" artists on albums.ArtistId = artists.ArtistId JOIN genres on tracks.GenreId = genres.GenreId JOIN " \
             f"playlist_track on tracks.TrackId = playlist_track.TrackId JOIN " \
             f"playlists on playlist_track.PlaylistId = playlists.PlaylistId WHERE tracks.TrackId = {track_id}" \
